@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BallPhysics : MonoBehaviour
 {
-    Rigidbody2D rb;
+    public float bounceForce;
 
-    [SerializeField] float bounceForce;
+    Rigidbody2D rb;
+    bool gameStarted;
 
     void Awake()
     {
@@ -15,9 +16,13 @@ public class BallPhysics : MonoBehaviour
 
     void Update()
     {
-        if(Input.anyKeyDown)
+        if(Input.anyKeyDown && !gameStarted)
         {
             StartBounce();
+
+            gameStarted = true;
+
+            GameManager.Instance.GameStart();
         }
     }
 
@@ -26,5 +31,17 @@ public class BallPhysics : MonoBehaviour
         Vector2 randomDirection = new Vector2(Random.Range(-1, 1), 1);
 
         rb.AddForce(randomDirection * bounceForce, ForceMode2D.Impulse);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "FallCheck")
+        {
+            GameManager.Instance.Restart();
+        }
+        else if(collision.gameObject.tag == "Paddle")
+        {
+            GameManager.Instance.ScoreUp();
+        }
     }
 }

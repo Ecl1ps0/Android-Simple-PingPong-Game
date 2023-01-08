@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public float moveSpeed;
 
-    [SerializeField] float moveSpeed;
+    Rigidbody2D rb;
 
     void Awake()
     {
